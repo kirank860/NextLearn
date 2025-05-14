@@ -11,9 +11,28 @@ export default function Header() {
     setShowLogoutModal(true);
   };
 
-  const confirmLogout = () => {
+  const confirmLogout = async () => {
     setShowLogoutModal(false);
-    router.push("/");
+    const accessToken = localStorage.getItem('access_token');
+    try {
+      await fetch('https://nexlearn.noviindusdemosites.in/auth/logout', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+    } catch (err) {
+      // Optionally handle error
+    } finally {
+      // Remove tokens and user info
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('token_type');
+      localStorage.removeItem('user');
+      localStorage.removeItem('phoneNumber');
+      // Redirect to login
+      router.push('/login');
+    }
   };
 
   return (

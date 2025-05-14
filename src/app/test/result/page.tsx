@@ -2,15 +2,59 @@
 import Header from "@/components/Header";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 function TestResultContent() {
   const params = useSearchParams();
-  const totalQuestions = 100;
-  const correct = Number(params.get("correct") || 0);
-  const incorrect = Number(params.get("incorrect") || 0);
-  const notAttended = Number(params.get("notAttended") || 0);
-  const marks = Number(params.get("marks") || 0);
+  const examHistoryId = params.get("exam_history_id");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [result, setResult] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchResult() {
+      setLoading(true);
+      setError("");
+      try {
+        const token = localStorage.getItem("access_token");
+        if (!token || !examHistoryId) {
+          setError("Missing token or exam history ID");
+          setLoading(false);
+          return;
+        }
+        const response = await fetch(`https://nexlearn.noviindusdemosites.in/answers/result?exam_history_id=${examHistoryId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (!data.success) throw new Error(data.message || "Failed to fetch result");
+        setResult(data);
+      } catch (err: any) {
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchResult();
+  }, [examHistoryId]);
+
+  if (loading) {
+    return <div className="flex-1 flex items-center justify-center">Loading...</div>;
+  }
+  if (error) {
+    return <div className="flex-1 flex items-center justify-center text-red-600">{error}</div>;
+  }
+  if (!result) {
+    return <div className="flex-1 flex items-center justify-center">No result found.</div>;
+  }
+
+  const totalQuestions = result.questions_count || 100;
+  const correct = result.correct || 0;
+  const incorrect = result.wrong || 0;
+  const notAttended = result.not_attended || 0;
+  const marks = result.score || 0;
 
   return (
     <div className="flex flex-col items-center justify-center flex-1 py-6 sm:py-8 px-2">

@@ -2,8 +2,10 @@
 import Header from "@/components/Header";
 // import Image from "next/image";
 import { useRouter } from "next/navigation";
+import useAuthGuard from "@/hooks/useAuthGuard";
 
 export default function Instructions() {
+  useAuthGuard();
   const router = useRouter();
   function handleStartTest() {
     router.push('/test');

@@ -2,25 +2,63 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Home() {
   const router = useRouter();
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    router.push("/login/verify");
+    setError('');
+    setLoading(true);
+
+    try {
+      if (!phoneNumber || phoneNumber.length !== 10) {
+        setError('Please enter a valid 10-digit phone number');
+        return;
+      }
+
+      // Send OTP using your backend API
+      const formData = new FormData();
+      formData.append('mobile', `+91${phoneNumber}`);
+
+      const response = await fetch('https://nexlearn.noviindusdemosites.in/auth/send-otp', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.message || 'Failed to send OTP');
+      }
+
+      // Store phone number for the verify page
+      localStorage.setItem('phoneNumber', phoneNumber);
+
+      // Navigate to verify page
+      router.push("/login/verify");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center  relative overflow-x-hidden p-4 md:p-0" style={{  backgroundImage: 'url("/bg-pattern.png")',
+    <main className="min-h-screen flex items-center justify-center relative overflow-x-hidden p-4 md:p-0" style={{  
+      backgroundImage: 'url("/bg-pattern.png")',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'}}>
-
+      backgroundRepeat: 'no-repeat'
+    }}>
       {/* Centered Card */}
       <div className="relative z-10 flex flex-col md:flex-row bg-[#23263A] rounded-xl shadow-2xl overflow-hidden w-full max-w-4xl mx-2 md:mx-4 my-8 md:my-0">
         {/* Left Section */}
-        <div className="flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 bg-gradient-to-r from-[#1C3141] to-[#2A4961]  md:w-1/2 w-full">
+        <div className="flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 bg-gradient-to-r from-[#1C3141] to-[#2A4961] md:w-1/2 w-full">
           <div className="flex items-center gap-3 mb-4">
             <Image src="/logo.png" alt="NexLearn Logo" width={248} height={248} className=" " />
             <div></div>
@@ -45,12 +83,24 @@ export default function Home() {
                 placeholder="1234 567891"
                 className="flex-1 bg-transparent outline-none text-gray-900 text-sm"
                 maxLength={10}
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ''))}
+                disabled={loading}
               />
             </div>
+            {error && (
+              <p className="text-xs text-red-500 mt-1">{error}</p>
+            )}
             <p className="text-xs text-gray-400 mt-1">
               By tapping Get started, you agree to the <a href="#" className="underline">Terms & Conditions</a>
             </p>
-            <button type="submit" className="mt-2 bg-[#1C3141] text-white py-2 rounded-lg font-semibold transition text-sm sm:text-base">Get Started</button>
+            <button 
+              type="submit" 
+              className="mt-2 bg-[#1C3141] text-white py-2 rounded-lg font-semibold transition text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={loading}
+            >
+              {loading ? 'Sending...' : 'Get Started'}
+            </button>
           </form>
         </div>
       </div>

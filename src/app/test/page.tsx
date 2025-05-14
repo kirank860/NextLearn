@@ -1,33 +1,63 @@
 "use client";
 import Image from "next/image";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
-
-// Generate 100 dummy questions
-const questions = Array.from({ length: 100 }, (_, i) => ({
-  question: `Q${i + 1}. This is a sample question number ${i + 1}. What is the answer?`,
-  image: i === 0 ? "/test-img.jpg" : undefined, // Only first question has an image
-  options: [
-    `Option A for Q${i + 1}`,
-    `Option B for Q${i + 1}`,
-    `Option C for Q${i + 1}`,
-    `Option D for Q${i + 1}`,
-  ],
-}));
 
 export default function Test() {
   const [showComprehensiveParagraph, setShowComprehensiveParagraph] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedOptions, setSelectedOptions] = useState<(string | null)[]>(Array(100).fill(null));
-  const [markedForReview, setMarkedForReview] = useState<boolean[]>(Array(100).fill(false));
-  const [visited, setVisited] = useState<boolean[]>(() => {
-    const arr = Array(100).fill(false);
-    arr[0] = true;
-    return arr;
-  });
+  const [selectedOptions, setSelectedOptions] = useState<any[]>([]);
+  const [markedForReview, setMarkedForReview] = useState<any[]>([]);
+  const [visited, setVisited] = useState<any[]>([]);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [questions, setQuestions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [meta, setMeta] = useState<any>({});
+  const [submitError, setSubmitError] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    async function fetchQuestions() {
+      setLoading(true);
+      setError("");
+      try {
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+          router.replace("/login");
+          return;
+        }
+        const response = await fetch("https://nexlearn.noviindusdemosites.in/question/list", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (!data.success) throw new Error(data.message || "Failed to fetch questions");
+        setQuestions(data.questions || []);
+        setMeta({
+          questions_count: data.questions_count,
+          total_marks: data.total_marks,
+          total_time: data.total_time,
+          time_for_each_question: data.time_for_each_question,
+          mark_per_each_answer: data.mark_per_each_answer,
+          instruction: data.instruction,
+        });
+        setSelectedOptions(Array((data.questions || []).length).fill(null));
+        setMarkedForReview(Array((data.questions || []).length).fill(false));
+        const arr = Array((data.questions || []).length).fill(false);
+        arr[0] = true;
+        setVisited(arr);
+      } catch (err: any) {
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchQuestions();
+  }, [router]);
 
   // Dummy correct answers for demonstration
   const correctAnswers = useMemo(() => Array(100).fill("A"), []); // All correct answers are 'A'
@@ -105,20 +135,63 @@ export default function Test() {
   }
 
   // Submit handler
-  const handleSubmitTest = () => {
-    const answered = selectedOptions.filter(Boolean).length;
-    let correct = 0;
-    let incorrect = 0;
-    for (let i = 0; i < selectedOptions.length; i++) {
-      if (selectedOptions[i]) {
-        if (selectedOptions[i] === correctAnswers[i]) correct++;
-        else incorrect++;
+  const handleSubmitTest = async () => {
+    setSubmitError("");
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        router.replace("/login");
+        return;
       }
+      // Build answers array as per API
+      const answers = questions.map((q: any, idx: number) => ({
+        question_id: q.id,
+        selected_option_id: selectedOptions[idx] ? q.options.find((opt: any, i: number) => String.fromCharCode(65 + i) === selectedOptions[idx])?.id : null
+      }));
+      const formData = new FormData();
+      formData.append('answers', JSON.stringify(answers));
+      const response = await fetch("https://nexlearn.noviindusdemosites.in/answers/submit", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || "Failed to submit answers");
+      setShowSubmitModal(false);
+      router.push(`/test/result?exam_history_id=${data.exam_history_id}&score=${data.score}&correct=${data.correct}&wrong=${data.wrong}&not_attended=${data.not_attended}`);
+    } catch (err: any) {
+      setSubmitError(err.message || "Failed to submit test");
     }
-    const notAttended = selectedOptions.filter((v) => !v).length;
-    const marks = correct; // For demo, 1 mark per correct
-    router.push(`/test/result?answered=${answered}&correct=${correct}&incorrect=${incorrect}&notAttended=${notAttended}&marks=${marks}`);
   };
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-[#F5FBFE] flex items-center justify-center">
+        {/* <Header /> */}
+        <div className="text-xl text-[#1C3141]">Loading questions...</div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="min-h-screen bg-[#F5FBFE] flex items-center justify-center">
+        <Header />
+        <div className="text-xl text-red-600">{error}</div>
+      </main>
+    );
+  }
+
+  if (!questions.length) {
+    return (
+      <main className="min-h-screen bg-[#F5FBFE] flex items-center justify-center">
+        <Header />
+        <div className="text-xl text-[#1C3141]">No questions found.</div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-[#F5FBFE]">
@@ -169,7 +242,7 @@ export default function Test() {
                     checked={selectedOption === opt}
                     onChange={() => handleOptionChange(opt)}
                   />
-                  <span className="flex-1">{opt}. {q.options[idx]}</span>
+                  <span className="flex-1">{opt}. {q.options[idx]?.option}</span>
                 </label>
               ))}
             </div>
@@ -281,6 +354,9 @@ export default function Test() {
             <button className="w-full bg-[#1C3141]  text-white py-2 rounded-md font-semibold hover:bg-[#1a2530] transition"
               onClick={handleSubmitTest}
             >Submit Test</button>
+            {submitError && (
+              <div className="text-red-600 mt-2 text-sm">{submitError}</div>
+            )}
           </div>
         </div>
       )}
