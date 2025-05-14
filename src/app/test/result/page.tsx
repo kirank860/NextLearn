@@ -41,7 +41,7 @@ function TestResultContent() {
             <span className="font-bold ml-auto">{notAttended.toString().padStart(3, '0')}</span>
           </div>
         </div>
-        <button className="w-full bg-[#223040] text-white py-2 sm:py-3 rounded-md font-semibold hover:bg-[#1a2530] transition text-base sm:text-lg">Done</button>
+        <button className="w-full bg-[#1C3141] text-white py-2 sm:py-3 rounded-md font-semibold hover:bg-[#1a2530] transition text-base sm:text-lg">Done</button>
       </div>
     </div>
   );

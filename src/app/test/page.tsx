@@ -198,7 +198,7 @@ export default function Test() {
               Next
             </button>
             <button
-              className="bg-[#223040] text-white px-6 sm:px-10 py-2 rounded-md font-semibold hover:bg-[#1a2530] transition text-base sm:text-lg"
+              className="bg-sky-600 text-white px-6 sm:px-10 py-2 rounded-md font-semibold hover:bg-[#1a2530] transition text-base sm:text-lg"
               onClick={() => setShowSubmitModal(true)}
             >
               Submit Test
@@ -278,7 +278,7 @@ export default function Test() {
                 <span className="font-bold ml-auto">{questionsMarked.toString().padStart(3, '0')}</span>
               </div>
             </div>
-            <button className="w-full bg-[#223040] text-white py-2 rounded-md font-semibold hover:bg-[#1a2530] transition"
+            <button className="w-full bg-[#1C3141]  text-white py-2 rounded-md font-semibold hover:bg-[#1a2530] transition"
               onClick={handleSubmitTest}
             >Submit Test</button>
           </div>

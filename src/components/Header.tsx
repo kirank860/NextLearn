@@ -47,7 +47,7 @@ export default function Header() {
                 Cancel
               </button>
               <button
-                className="flex-1 bg-[#223040] text-white py-2 rounded-md font-semibold hover:bg-[#1a2530] transition"
+                className="flex-1 bg-[#1C3141] text-white py-2 rounded-md font-semibold hover:bg-[#1a2530] transition"
                 onClick={confirmLogout}
               >
                 Logout

@@ -23,15 +23,15 @@ export default function Instructions() {
 
           {/* Info Cards */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-0 mb-8 w-full max-w-2xl">
-            <div className="bg-[#223040] text-white rounded-t-md sm:rounded-l-md sm:rounded-tr-none px-6 sm:px-10 py-4 sm:py-6 flex flex-col items-center flex-1 border-b sm:border-b-0 sm:border-r border-[#F5FBFE] w-full sm:w-auto">
+            <div className="bg-[#1C3141] text-white rounded-t-md sm:rounded-l-md sm:rounded-tr-none px-6 sm:px-10 py-4 sm:py-6 flex flex-col items-center flex-1 border-b sm:border-b-0 sm:border-r border-[#F5FBFE] w-full sm:w-auto">
               <span className="text-sm sm:text-base mb-1 font-medium">Total MCQ&apos;s:</span>
               <span className="text-2xl sm:text-4xl font-bold">100</span>
             </div>
-            <div className="bg-[#223040] text-white px-6 sm:px-10 py-4 sm:py-6 flex flex-col items-center flex-1 border-b sm:border-b-0 sm:border-r border-[#F5FBFE] w-full sm:w-auto">
+            <div className="bg-[#1C3141] text-white px-6 sm:px-10 py-4 sm:py-6 flex flex-col items-center flex-1 border-b sm:border-b-0 sm:border-r border-[#F5FBFE] w-full sm:w-auto">
               <span className="text-sm sm:text-base mb-1 font-medium">Total marks:</span>
               <span className="text-2xl sm:text-4xl font-bold">100</span>
             </div>
-            <div className="bg-[#223040] text-white rounded-b-md sm:rounded-r-md sm:rounded-bl-none px-6 sm:px-10 py-4 sm:py-6 flex flex-col items-center flex-1 w-full sm:w-auto">
+            <div className="bg-[#1C3141] text-white rounded-b-md sm:rounded-r-md sm:rounded-bl-none px-6 sm:px-10 py-4 sm:py-6 flex flex-col items-center flex-1 w-full sm:w-auto">
               <span className="text-sm sm:text-base mb-1 font-medium">Total time:</span>
               <span className="text-2xl sm:text-4xl font-bold">90:00</span>
             </div>
@@ -58,7 +58,7 @@ export default function Instructions() {
 
             {/* Start Button */}
             <div className="flex justify-center">
-              <button onClick={handleStartTest} className="bg-[#223040] text-white px-6 sm:px-10 py-3 rounded-md font-semibold hover:bg-[#1a2530] transition text-base sm:text-lg">
+              <button onClick={handleStartTest} className="bg-[#1C3141] text-white px-6 sm:px-10 py-3 rounded-md font-semibold hover:bg-[#1a2530] transition text-base sm:text-lg">
                 Start Test
               </button>
             </div>

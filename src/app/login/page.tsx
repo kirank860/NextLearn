@@ -12,15 +12,15 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[#181A20] relative overflow-x-hidden">
-      {/* Background pattern overlay */}
-      <div className="fixed inset-0 z-0">
-        <Image src="/bg-pattern.png" alt="Background Pattern" fill className="object-cover opacity-40" />
-      </div>
+    <main className="min-h-screen flex items-center justify-center  relative overflow-x-hidden p-4 md:p-0" style={{  backgroundImage: 'url("/bg-pattern.png")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'}}>
+
       {/* Centered Card */}
       <div className="relative z-10 flex flex-col md:flex-row bg-[#23263A] rounded-xl shadow-2xl overflow-hidden w-full max-w-4xl mx-2 md:mx-4 my-8 md:my-0">
         {/* Left Section */}
-        <div className="flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 bg-gradient-to-b from-[#23263A] to-[#181A20] md:w-1/2 w-full">
+        <div className="flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 bg-gradient-to-r from-[#1C3141] to-[#2A4961]  md:w-1/2 w-full">
           <div className="flex items-center gap-3 mb-4">
             <Image src="/logo.png" alt="NexLearn Logo" width={248} height={248} className=" " />
             <div></div>
@@ -38,7 +38,7 @@ export default function Home() {
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <label htmlFor="phone" className="text-xs text-gray-600">Phone number</label>
             <div className="flex items-center border rounded-lg px-3 py-2 bg-gray-50 focus-within:ring-2 ring-blue-500">
-              <span className="text-gray-500 mr-2">+91</span>
+              <span className="text-gray-500 mr-2"> 🇮🇳  +91</span>
               <input
                 id="phone"
                 type="tel"
@@ -50,7 +50,7 @@ export default function Home() {
             <p className="text-xs text-gray-400 mt-1">
               By tapping Get started, you agree to the <a href="#" className="underline">Terms & Conditions</a>
             </p>
-            <button type="submit" className="mt-2 bg-[#23263A] text-white py-2 rounded-lg font-semibold hover:bg-[#181A20] transition text-sm sm:text-base">Get Started</button>
+            <button type="submit" className="mt-2 bg-[#1C3141] text-white py-2 rounded-lg font-semibold transition text-sm sm:text-base">Get Started</button>
           </form>
         </div>
       </div>

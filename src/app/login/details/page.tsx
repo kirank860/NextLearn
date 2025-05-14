@@ -30,15 +30,16 @@ export default function Details() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[#181A20] relative overflow-x-hidden">
+    <main className="min-h-screen p-4 md:p-0 flex items-center justify-center bg-[#181A20] relative overflow-x-hidden" style={{  backgroundImage: 'url("/bg-pattern.png")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'}}>
       {/* Background pattern overlay */}
-      <div className="fixed inset-0 z-0">
-        <Image src="/bg-pattern.png" alt="Background Pattern" fill className="object-cover opacity-40" />
-      </div>
+      
       {/* Centered Card */}
       <div className="relative z-10 flex flex-col md:flex-row bg-[#23263A] rounded-xl shadow-2xl overflow-hidden w-full max-w-4xl mx-2 md:mx-4 my-8 md:my-0">
         {/* Left Section */}
-        <div className="flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 bg-gradient-to-b from-[#23263A] to-[#181A20] md:w-1/2 w-full">
+        <div className="flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 bg-gradient-to-r from-[#1C3141] to-[#2A4961] md:w-1/2 w-full">
           <div className="flex items-center gap-3 mb-4">
             <Image src="/logo.png" alt="NexLearn Logo" width={248} height={248} className=" " />
             <div></div>
@@ -81,7 +82,7 @@ export default function Details() {
               <input id="email" type="email" placeholder="Enter your Email Address" className="w-full border rounded-lg px-3 py-2 bg-gray-50 focus:ring-2 ring-blue-500 outline-none text-gray-900 text-sm" />
               <label htmlFor="qualification" className="text-xs text-gray-600">Your qualification*</label>
               <input id="qualification" type="text" placeholder="Your qualification" className="w-full border rounded-lg px-3 py-2 bg-gray-50 focus:ring-2 ring-blue-500 outline-none text-gray-900 text-sm" />
-              <button type="submit" className="w-full mt-2 bg-[#23263A] text-white py-2 rounded-lg font-semibold hover:bg-[#181A20] transition text-sm sm:text-base">Get Started</button>
+              <button type="submit" className="w-full mt-2 bg-[#1C3141] text-white py-2 rounded-lg font-semibold transition text-sm sm:text-base">Get Started</button>
             </form>
           </div>
         </div>
