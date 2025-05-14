@@ -33,7 +33,7 @@ export default function Verify() {
         <div className="flex flex-col justify-center p-6 sm:p-8 md:p-12 bg-white md:w-1/2 w-full min-w-[0]">
           <div className="mb-6">
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Enter the code we texted you</h2>
-            <p className="text-xs sm:text-sm text-gray-500 mb-2">We've sent an SMS to +91 1234 567891</p>
+            <p className="text-xs sm:text-sm text-gray-500 mb-2">We&apos;ve sent an SMS to +91 1234 567891</p>
             <form onSubmit={handleSubmit} className="flex flex-col gap-0">
               <label htmlFor="sms" className="text-xs text-gray-600">SMS code</label>
               <input

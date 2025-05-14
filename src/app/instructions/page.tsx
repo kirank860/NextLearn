@@ -1,6 +1,6 @@
 "use client";
 import Header from "@/components/Header";
-import Image from "next/image";
+// import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function Instructions() {
@@ -42,7 +42,7 @@ export default function Instructions() {
             <h3 className="font-semibold mb-2 text-gray-800 text-base sm:text-lg">Instructions:</h3>
             <ol className="list-decimal list-inside text-gray-700 text-sm sm:text-base mb-10 pl-4 space-y-1">
               <li>You have 100 minutes to complete the test.</li>
-              <li>Test consists of 100 multiple-choice q's.</li>
+              <li>Test consists of 100 multiple-choice q&apos;s.</li>
               <li>You are allowed 2 retest attempts if you do not pass on the first try.</li>
               <li>Each incorrect answer will incur a negative mark of -1/4.</li>
               <li>Ensure you are in a quiet environment and have a stable internet connection.</li>

@@ -24,22 +24,22 @@ export default function TestResult() {
           </div>
           <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-8">
             <div className="flex items-center gap-2 sm:gap-3 text-[#1C3141] text-sm sm:text-base">
-              <img src="/list.png" alt="" className="w-6 h-6" />
+              <Image src="/list.png" alt="" width={24} height={24} className="w-6 h-6" />
               <span>Total Questions:</span>
               <span className="font-bold ml-auto">{totalQuestions.toString().padStart(3, '0')}</span>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 text-[#1C3141] text-sm sm:text-base">
-              <img src="/check.png" alt="" className="w-6 h-6" />
+              <Image src="/check.png" alt="" width={24} height={24} className="w-6 h-6" />
               <span>Correct Answers:</span>
               <span className="font-bold ml-auto">{correct.toString().padStart(3, '0')}</span>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 text-[#1C3141] text-sm sm:text-base">
-              <img src="/wrong.png" alt="" className="w-6 h-6" />
+              <Image src="/wrong.png" alt="" width={24} height={24} className="w-6 h-6" />
               <span>Incorrect Answers:</span>
               <span className="font-bold ml-auto">{incorrect.toString().padStart(3, '0')}</span>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 text-[#1C3141] text-sm sm:text-base">
-              <img src="/notattended.png" alt="" className="w-6 h-6" />
+              <Image src="/notattended.png" alt="" width={24} height={24} className="w-6 h-6" />
               <span>Not Attended Questions:</span>
               <span className="font-bold ml-auto">{notAttended.toString().padStart(3, '0')}</span>
             </div>

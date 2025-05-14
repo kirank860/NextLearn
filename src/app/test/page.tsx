@@ -258,22 +258,22 @@ export default function Test() {
             <div className="text-lg font-semibold mb-4 text-center text-[#1C3141]">Are you sure you want to submit the test?</div>
             <div className="flex flex-col gap-3 w-full mb-4 text-[#1C3141]">
               <div className="flex items-center gap-3 text-sm">
-                  <img src="/clock.png" alt="" />
+                  <Image src="/clock.png" alt="" width={20} height={20} className="mr-2" />
                 <span>Remaining Time:</span>
                 <span className="font-bold ml-auto">87:13</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
-         <img src="/list.png" alt="" />
+         <Image src="/list.png" alt="" width={20} height={20} className="mr-2" />
                 <span>Total Questions:</span>
                 <span className="font-bold ml-auto">{questions.length.toString().padStart(3, '0')}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
-                <img src="/check.png" alt="" />
+                <Image src="/check.png" alt="" width={20} height={20} className="mr-2" />
                 <span>Questions Answered:</span>
                 <span className="font-bold ml-auto">{questionsAnswered.toString().padStart(3, '0')}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
-              <img src="/review.png" alt="" />
+              <Image src="/review.png" alt="" width={20} height={20} className="mr-2" />
                 <span>Marked for review:</span>
                 <span className="font-bold ml-auto">{questionsMarked.toString().padStart(3, '0')}</span>
               </div>
