@@ -17,6 +17,9 @@ export default function Test() {
   const [meta, setMeta] = useState<any>({});
   const [submitError, setSubmitError] = useState("");
   const router = useRouter();
+  // Timer state
+  const [remainingTime, setRemainingTime] = useState(0);
+  const [timeExceededModal, setTimeExceededModal] = useState(false);
 
   useEffect(() => {
     async function fetchQuestions() {
@@ -59,8 +62,47 @@ export default function Test() {
     fetchQuestions();
   }, [router]);
 
-  // Dummy correct answers for demonstration
-  const correctAnswers = useMemo(() => Array(100).fill("A"), []); // All correct answers are 'A'
+  useEffect(() => {
+    if (!loading && questions.length) {
+      const totalSeconds = (meta.total_time ? Number(meta.total_time) : 90) * 10;
+      setRemainingTime(totalSeconds);
+    }
+  }, [loading, questions.length, meta.total_time]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    
+    if (!loading && remainingTime > 0) {
+      interval = setInterval(() => {
+        setRemainingTime((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            setTimeExceededModal(true);
+            setTimeout(() => {
+              setTimeExceededModal(false);
+              handleSubmitTest();
+            }, 2000);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [loading, remainingTime]);
+
+  function formatTime(seconds: number) {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  }
+
+  const correctAnswers = useMemo(() => Array(100).fill("A"), []); 
 
   const toggleComprehensiveParagraph = () => {
     setShowComprehensiveParagraph(!showComprehensiveParagraph);
@@ -287,14 +329,14 @@ export default function Test() {
               Remaining Time:
               <span className="inline-flex items-center gap-1">
                 <span className="material-icons">schedule</span>
-                <span>87:13</span>
+                <span>{formatTime(remainingTime)}</span>
               </span>
             </div>
           </div>
 
           {/* Question Number Grid */}
           <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-4 mb-6">
-            {Array.from({ length: 100 }, (_, i) => (
+            {Array.from({ length: questions.length }, (_, i) => (
               <button
                 key={i}
                 className={`rounded h-12 w-12 text-sm font-medium flex items-center justify-center
@@ -333,7 +375,7 @@ export default function Test() {
               <div className="flex items-center gap-3 text-sm">
                   <Image src="/clock.png" alt="" width={20} height={20} className="mr-2" />
                 <span>Remaining Time:</span>
-                <span className="font-bold ml-auto">87:13</span>
+                <span className="font-bold ml-auto">{formatTime(remainingTime)}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
          <Image src="/list.png" alt="" width={20} height={20} className="mr-2" />
@@ -387,6 +429,16 @@ export default function Test() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Time Exceeded Modal */}
+      {timeExceededModal && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-xs flex flex-col items-center">
+            <div className="text-lg font-semibold mb-2 text-center text-[#1C3141]">Your time is exceeded</div>
+            <div className="text-[#1C3141] text-sm text-center">Your test will be submitted automatically.</div>
           </div>
         </div>
       )}

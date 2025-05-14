@@ -8,7 +8,7 @@ export default function useAuthGuard() {
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
     if (!token) {
-      router.replace("/login");
+      // router.replace("/login");
     }
   }, [router]);
 } 
