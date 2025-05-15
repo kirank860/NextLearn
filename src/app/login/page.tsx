@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   const router = useRouter();
@@ -56,9 +58,19 @@ export default function Home() {
       backgroundRepeat: 'no-repeat'
     }}>
       {/* Centered Card */}
-      <div className="relative z-10 flex flex-col md:flex-row bg-[#23263A] rounded-xl shadow-2xl overflow-hidden w-full max-w-4xl mx-2 md:mx-4 my-8 md:my-0">
+      <motion.div
+        className="relative z-10 flex flex-col md:flex-row bg-[#23263A] rounded-xl shadow-2xl overflow-hidden w-full max-w-4xl mx-2 md:mx-4 my-8 md:my-0"
+        initial={{ opacity: 0, scale: 0.95, y: 40 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+      >
         {/* Left Section */}
-        <div className="flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 bg-gradient-to-r from-[#1C3141] to-[#2A4961] md:w-1/2 w-full">
+        <motion.div
+          className="flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 bg-gradient-to-r from-[#1C3141] to-[#2A4961] md:w-1/2 w-full"
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
+        >
           <div className="flex items-center gap-3 mb-4">
             <Image src="/logo.png" alt="NexLearn Logo" width={248} height={248} className=" " />
             <div></div>
@@ -66,14 +78,25 @@ export default function Home() {
           <div className="my-6 sm:my-8 w-full flex justify-center">
             <Image src="/illustration.png" alt="Learning Illustration" width={220} height={180} className="w-40 h-auto sm:w-56" />
           </div>
-        </div>
+        </motion.div>
         {/* Right Section */}
-        <div className="flex flex-col justify-center p-6 sm:p-8 md:p-12 bg-white md:w-1/2 w-full min-w-[0]">
+        <motion.div
+          className="flex flex-col justify-center p-6 sm:p-8 md:p-12 bg-white md:w-1/2 w-full min-w-[0]"
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.3, ease: 'easeOut' }}
+        >
           <div className="mb-6">
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Enter your phone number</h2>
             <p className="text-xs sm:text-sm text-gray-500">We use your mobile number to identify your account</p>
           </div>
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <motion.form
+            className="flex flex-col gap-4"
+            onSubmit={handleSubmit}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.5, ease: 'easeOut' }}
+          >
             <label htmlFor="phone" className="text-xs text-gray-600">Phone number</label>
             <div className="flex items-center border rounded-lg px-3 py-2 bg-gray-50 focus-within:ring-2 ring-blue-500">
               <span className="text-gray-500 mr-2"> 🇮🇳  +91</span>
@@ -89,21 +112,25 @@ export default function Home() {
               />
             </div>
             {error && (
-              <p className="text-xs text-red-500 mt-1">{error}</p>
+              <motion.p className="text-xs text-red-500 mt-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                {error}
+              </motion.p>
             )}
             <p className="text-xs text-gray-400 mt-1">
               By tapping Get started, you agree to the <a href="#" className="underline">Terms & Conditions</a>
             </p>
-            <button 
+            <motion.button 
               type="submit" 
               className="mt-2 bg-[#1C3141] text-white py-2 rounded-lg font-semibold transition text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={loading}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.98 }}
             >
               {loading ? 'Sending...' : 'Get Started'}
-            </button>
-          </form>
-        </div>
-      </div>
+            </motion.button>
+          </motion.form>
+        </motion.div>
+      </motion.div>
     </main>
   );
 }

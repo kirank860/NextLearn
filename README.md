@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NexLearn - Futuristic Learning Platform
+
+NexLearn is a modern, interactive online learning and assessment platform built with Next.js, React, Redux Toolkit, and Framer Motion. It offers a seamless experience for students and professionals to take MCQ-based tests, manage their profiles, and view results with beautiful UI and smooth animations.
+
+## Features
+
+- **Modern UI/UX**: Responsive, attractive design with global and page-level animations using Framer Motion.
+- **Authentication**: Secure OTP-based login and verification flow.
+- **Profile Management**: Users can add and update their profile details and photo.
+- **Exam Module**:
+  - Fetches questions from a backend API.
+  - Allows answering, marking for review, and navigating between questions.
+  - Timer and auto-submit on time expiry.
+  - Animated modals and feedback.
+- **Result Page**: Shows detailed results with correct, incorrect, and not attended questions, all with smooth transitions.
+- **State Management**: Uses Redux Toolkit for global state (test results, API base URL, etc.).
+- **API Integration**: All backend calls use a configurable base URL from Redux.
+- **Mobile Friendly**: Fully responsive for all device sizes.
+
+## Tech Stack
+- [Next.js](https://nextjs.org/) (App Router)
+- [React](https://react.dev/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [Framer Motion](https://www.framer.com/motion/) (animations)
+- [Tailwind CSS](https://tailwindcss.com/) (utility-first styling)
 
 ## Getting Started
+clone this repo
+git clone https://github.com/kirank860/NextLearn.git
+1. **Install dependencies:**
+   ```bash
+   npm install
 
-First, run the development server:
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. **Run the development server:**
+   ```bash
+   npm run dev
+ 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. **Open your browser:**
+   Visit [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
+- `src/app/` - Main app pages (login, verify, test, result, etc.)
+- `src/components/` - Reusable UI components (Header, ReduxProvider, ClientWrapper, etc.)
+- `src/store/` - Redux slices and store setup
+- `src/lib/` - Utility libraries (e.g., Firebase config)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## API Integration
+- All API calls use the base URL stored in Redux (`https://nexlearn.noviindusdemosites.in`).
+- Endpoints include:
+  - `/auth/send-otp` (send OTP)
+  - `/auth/verify-otp` (verify OTP)
+  - `/auth/create-profile` (profile management)
+  - `/question/list` (fetch questions)
+  - `/answers/submit` (submit answers)
+  - `/answers/result` (fetch results)(in the result page i added dummy data because i didn't received the endpoint in the doc)
 
-## Learn More
+## Animations & UX
+- Global page transitions (fade/slide) using Framer Motion.
+- Animated cards, forms, and buttons for login and verification.
+- Micro-interactions for buttons and error messages.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

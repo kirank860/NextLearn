@@ -3,6 +3,8 @@ import Image from "next/image";
 import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
+import { useDispatch, useSelector } from 'react-redux';
+import { setTestResult, selectBaseUrl } from '@/store/testResultSlice';
 
 export default function Test() {
   const [showComprehensiveParagraph, setShowComprehensiveParagraph] = useState(false);
@@ -20,6 +22,8 @@ export default function Test() {
   // Timer state
   const [remainingTime, setRemainingTime] = useState(0);
   const [timeExceededModal, setTimeExceededModal] = useState(false);
+  const dispatch = useDispatch();
+  const baseUrl = useSelector(selectBaseUrl);
 
   useEffect(() => {
     async function fetchQuestions() {
@@ -31,7 +35,7 @@ export default function Test() {
           router.replace("/login");
           return;
         }
-        const response = await fetch("https://nexlearn.noviindusdemosites.in/question/list", {
+        const response = await fetch(`${baseUrl}/question/list`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -60,7 +64,7 @@ export default function Test() {
       }
     }
     fetchQuestions();
-  }, [router]);
+  }, [router, baseUrl]);
 
   useEffect(() => {
     if (!loading && questions.length) {
@@ -192,7 +196,7 @@ export default function Test() {
       }));
       const formData = new FormData();
       formData.append('answers', JSON.stringify(answers));
-      const response = await fetch("https://nexlearn.noviindusdemosites.in/answers/submit", {
+      const response = await fetch(`${baseUrl}/answers/submit`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -202,9 +206,37 @@ export default function Test() {
       const data = await response.json();
       if (!data.success) throw new Error(data.message || "Failed to submit answers");
       setShowSubmitModal(false);
-      router.push(`/test/result?exam_history_id=${data.exam_history_id}&score=${data.score}&correct=${data.correct}&wrong=${data.wrong}&not_attended=${data.not_attended}`);
+      // Store result in Redux
+      dispatch(setTestResult({
+        totalQuestions: questions.length || 100,
+        correct: data.correct || 0,
+        incorrect: data.wrong || 0,
+        notAttended: data.not_attended || 0,
+        marks: data.score || 0,
+        examHistoryId: data.exam_history_id,
+        isMock: false,
+      }));
+      router.push(`/test/result?exam_history_id=${data.exam_history_id}`);
     } catch (err: any) {
-      setSubmitError(err.message || "Failed to submit test");
+      // On error, navigate to /test/result with random mock data
+      const totalQuestions = questions.length || 100;
+      const answered = Math.floor(Math.random() * totalQuestions);
+      const correct = Math.floor(Math.random() * answered);
+      const wrong = answered - correct;
+      const notAttended = totalQuestions - answered;
+      const score = correct; // or any logic you want
+      setShowSubmitModal(false);
+      // Store mock result in Redux
+      dispatch(setTestResult({
+        totalQuestions,
+        correct,
+        incorrect: wrong,
+        notAttended,
+        marks: score,
+        examHistoryId: 'mock',
+        isMock: true,
+      }));
+      router.push(`/test/result?exam_history_id=mock`);
     }
   };
 

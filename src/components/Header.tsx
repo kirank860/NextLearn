@@ -2,10 +2,13 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useSelector } from 'react-redux';
+import { selectBaseUrl } from '@/store/testResultSlice';
 
 export default function Header() {
   const router = useRouter();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const baseUrl = useSelector(selectBaseUrl);
 
   const handleLogout = () => {
     setShowLogoutModal(true);
@@ -15,7 +18,7 @@ export default function Header() {
     setShowLogoutModal(false);
     const accessToken = localStorage.getItem('access_token');
     try {
-      await fetch('https://nexlearn.noviindusdemosites.in/auth/logout', {
+      await fetch(`${baseUrl}/auth/logout`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`,

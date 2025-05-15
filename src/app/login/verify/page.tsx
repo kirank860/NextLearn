@@ -3,6 +3,9 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
+import { selectBaseUrl } from '@/store/testResultSlice';
+import { motion } from 'framer-motion';
 
 export default function Verify() {
   const router = useRouter();
@@ -12,6 +15,7 @@ export default function Verify() {
   const [loading, setLoading] = useState(false);
   const [resendDisabled, setResendDisabled] = useState(false);
   const [resendTimer, setResendTimer] = useState(30);
+  const baseUrl = useSelector(selectBaseUrl);
 
   useEffect(() => {
     // Get phone number from localStorage
@@ -52,7 +56,7 @@ export default function Verify() {
       formData.append('mobile', phoneNumber.startsWith('+91') ? phoneNumber : `+91${phoneNumber}`);
       formData.append('otp', otp);
 
-      const response = await fetch('https://nexlearn.noviindusdemosites.in/auth/verify-otp', {
+      const response = await fetch(`${baseUrl}/auth/verify-otp`, {
         method: 'POST',
         body: formData,
       });
@@ -90,7 +94,7 @@ export default function Verify() {
     try {
       const formData = new FormData();
       formData.append('mobile', phoneNumber.startsWith('+91') ? phoneNumber : `+91${phoneNumber}`);
-      const response = await fetch('https://nexlearn.noviindusdemosites.in/auth/send-otp', {
+      const response = await fetch(`${baseUrl}/auth/send-otp`, {
         method: 'POST',
         body: formData,
       });
@@ -114,9 +118,19 @@ export default function Verify() {
       {/* Background pattern overlay */}
      
       {/* Centered Card */}
-      <div className="relative z-10 flex flex-col md:flex-row bg-[#23263A] rounded-xl shadow-2xl overflow-hidden w-full max-w-4xl mx-2 md:mx-4 my-8 md:my-0">
+      <motion.div
+        className="relative z-10 flex flex-col md:flex-row bg-[#23263A] rounded-xl shadow-2xl overflow-hidden w-full max-w-4xl mx-2 md:mx-4 my-8 md:my-0"
+        initial={{ opacity: 0, scale: 0.95, y: 40 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+      >
         {/* Left Section */}
-        <div className="flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 bg-gradient-to-r from-[#1C3141] to-[#2A4961] md:w-1/2 w-full">
+        <motion.div
+          className="flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 bg-gradient-to-r from-[#1C3141] to-[#2A4961] md:w-1/2 w-full"
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
+        >
           <div className="flex items-center gap-3 mb-4">
             <Image src="/logo.png" alt="NexLearn Logo" width={248} height={248} className=" " />
             <div></div>
@@ -124,13 +138,24 @@ export default function Verify() {
           <div className="my-6 sm:my-8 w-full flex justify-center">
             <Image src="/illustration.png" alt="Learning Illustration" width={220} height={180} className="w-40 h-auto sm:w-56" />
           </div>
-        </div>
+        </motion.div>
         {/* Right Section */}
-        <div className="flex flex-col justify-center p-6 sm:p-8 md:p-12 bg-white md:w-1/2 w-full min-w-[0]">
+        <motion.div
+          className="flex flex-col justify-center p-6 sm:p-8 md:p-12 bg-white md:w-1/2 w-full min-w-[0]"
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.3, ease: 'easeOut' }}
+        >
           <div className="mb-6">
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Enter the code we texted you</h2>
             <p className="text-xs sm:text-sm text-gray-500 mb-2">We&apos;ve sent an SMS to {phoneNumber}</p>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-0">
+            <motion.form
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-0"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.5, ease: 'easeOut' }}
+            >
               <label htmlFor="sms" className="text-xs text-gray-600">SMS code</label>
               <input
                 id="sms"
@@ -143,28 +168,34 @@ export default function Verify() {
                 disabled={loading}
               />
               {error && (
-                <p className="text-xs text-red-500 mb-2">{error}</p>
+                <motion.p className="text-xs text-red-500 mb-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  {error}
+                </motion.p>
               )}
               <p className="text-xs text-gray-400 mb-2">Your 6 digit code is on its way. This can sometimes take a few moments to arrive.</p>
-              <button
+              <motion.button
                 type="button"
                 onClick={handleResendOTP}
                 disabled={resendDisabled}
                 className="text-xs text-blue-600 underline mb-4 inline-block disabled:opacity-50 disabled:cursor-not-allowed"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.98 }}
               >
                 {resendDisabled ? `Resend code in ${resendTimer}s` : 'Resend code'}
-              </button>
-              <button 
+              </motion.button>
+              <motion.button 
                 type="submit" 
                 className="w-full mt-2 bg-[#1C3141] text-white py-2 rounded-lg font-semibold transition text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={loading}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.98 }}
               >
                 {loading ? 'Verifying...' : 'Get Started'}
-              </button>
-            </form>
+              </motion.button>
+            </motion.form>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </main>
   );
 } 

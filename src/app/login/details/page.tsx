@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSelector } from 'react-redux';
+import { selectBaseUrl } from '@/store/testResultSlice';
 
 export default function Details() {
   const router = useRouter();
@@ -15,6 +17,8 @@ export default function Details() {
 
   // Get phone number from localStorage (should be set during login flow)
   const phoneNumber = typeof window !== 'undefined' ? localStorage.getItem('phoneNumber') : '';
+
+  const baseUrl = useSelector(selectBaseUrl);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -38,7 +42,7 @@ export default function Details() {
       formData.append('qualification', qualification);
       formData.append('profile_image', profileImage);
 
-      const response = await fetch('https://nexlearn.noviindusdemosites.in/auth/create-profile', {
+      const response = await fetch(`${baseUrl}/auth/create-profile`, {
         method: 'POST',
         body: formData,
       });
