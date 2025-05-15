@@ -177,7 +177,7 @@ export default function Verify() {
                 type="button"
                 onClick={handleResendOTP}
                 disabled={resendDisabled}
-                className="text-xs text-blue-600 underline mb-4 inline-block disabled:opacity-50 disabled:cursor-not-allowed"
+                className="text-xs text-black underline mb-4 inline-block disabled:opacity-50 disabled:cursor-not-allowed"
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.98 }}
               >
